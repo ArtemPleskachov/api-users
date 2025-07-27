@@ -152,7 +152,7 @@ API documentation (if available) can be published with tools like [Postman Docum
 
 ## 🛠 Technologies Used
 
-- Symfony 6.x
+- Symfony 7.x
 - PHP 8.3+
 - MySQL
 - Docker
