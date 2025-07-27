@@ -13,4 +13,5 @@ interface UserRepositoryInterface
     public function findById(int $id): ?User;
     public function findByLogin(string $login): ?User;
     public function findByPublicId(string $publicId): ?User;
+    public function findOneByLoginAndPass(string $login, string $pass): ?User;
 }

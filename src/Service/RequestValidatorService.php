@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Symfony\Component\Validator\Exception\ValidationFailedException;
+use App\Exception\Request\ValidationException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RequestValidatorService
@@ -12,9 +12,15 @@ class RequestValidatorService
     public function validate(object $dto): void
     {
         $errors = $this->validator->validate($dto);
-        
+    
         if (count($errors) > 0) {
-            throw new ValidationFailedException($dto, $errors);
+            $messages = [];
+        
+            foreach ($errors as $error) {
+                $messages[$error->getPropertyPath()][] = $error->getMessage();
+            }
+        
+            throw new ValidationException($messages);
         }
     }
 }

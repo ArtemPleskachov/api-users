@@ -28,7 +28,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     
     public function findAll(): array
     {
-        return parent::findAll();
+        return parent::findAll(); // або $this->createQueryBuilder('u')->getQuery()->getResult();
     }
     
     public function findById(int $id): ?User
@@ -44,5 +44,10 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function findByPublicId(string $publicId): ?User
     {
         return $this->findOneBy(['publicId' => $publicId]);
+    }
+    
+    public function findOneByLoginAndPass(string $login, string $pass): ?User
+    {
+        return $this->findOneBy(['login' => $login, 'pass' => $pass]);
     }
 }

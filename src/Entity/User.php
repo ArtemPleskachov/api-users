@@ -24,7 +24,7 @@ class User
     #[ORM\Column(length: 8)]
     private ?string $pass = null;
     
-    #[ORM\Column(type: 'string', unique: true)]
+    #[ORM\Column(type: 'string', length: 8, unique: true)]
     private string $publicId;
     
     

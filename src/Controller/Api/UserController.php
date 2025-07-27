@@ -24,8 +24,9 @@ final class UserController extends AbstractController
         $dto = UserRequestDTO::fromJson($request->getContent());
         $this->validator->validate($dto);
         
+        $user = $this->userService->create($dto);
         return $this->json(
-            $this->userService->createUser($dto),
+            $user,
             JsonResponse::HTTP_CREATED
         );
     }
