@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Validator\Constraints;
+namespace App\Validator\Constraints\User;
 
 use App\DTO\Request\UserRequestDTO;
+use App\Repository\Contract\UserRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use App\Repository\Contract\UserRepositoryInterface;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class UniqueUserValidator extends ConstraintValidator

@@ -1,7 +1,8 @@
 <?php
 
 namespace App\DTO\Request;
-use App\Validator\Constraints\UniqueUser;
+use App\Validator\Constraints\User\UniquePublicId;
+use App\Validator\Constraints\User\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueUser]
@@ -22,6 +23,7 @@ class UserRequestDTO
         
         #[Assert\NotBlank]
         #[Assert\Length(max: 8)]
+        #[UniquePublicId]
         public readonly string $publicId
     ) {}
     

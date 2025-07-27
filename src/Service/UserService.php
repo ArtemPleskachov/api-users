@@ -33,6 +33,11 @@ class UserService
         return $user;
     }
     
+    public function getUserByPublicId(string $publicId): User
+    {
+        return $this->userRepository->findByPublicId($publicId);
+    }
+    
     public function delete(User $user): void
     {
         $this->userRepository->remove($user);

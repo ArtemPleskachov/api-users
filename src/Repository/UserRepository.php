@@ -12,18 +12,19 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+        $this->em = $this->getEntityManager();
     }
     
     public function save(User $user): void
     {
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->em->persist($user);
+        $this->em->flush();
     }
     
     public function remove(User $user): void
     {
-        $this->_em->remove($user);
-        $this->_em->flush();
+        $this->getEntityManager()->remove($user);
+        $this->getEntityManager()->flush();
     }
     
     public function findAll(): array

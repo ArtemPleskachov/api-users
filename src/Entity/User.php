@@ -6,7 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: '`users`')]
 #[ORM\UniqueConstraint(name: "unique_login_pass", columns: ["login", "pass"])]
 class User
 {

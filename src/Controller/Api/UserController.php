@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\DTO\Request\UserRequestDTO;
+use App\DTO\Responce\UserResponseDTO;
 use App\Service\RequestValidatorService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,26 +16,39 @@ final class UserController extends AbstractController
 {
     public function __construct(
         private readonly UserService $userService,
-        private readonly RequestValidatorService $validator
+        private readonly RequestValidatorService $validator,
     ) {}
     
-    #[Route('', name: 'user_create', methods: ['POST'])]
+    #[Route('', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $dto = UserRequestDTO::fromJson($request->getContent());
         $this->validator->validate($dto);
         
         $user = $this->userService->create($dto);
+        $response = UserResponseDTO::fromEntity($user);
+        
         return $this->json(
-            $user,
-            JsonResponse::HTTP_CREATED
+            ['success' => true, 'data' => $response],
+            JsonResponse::HTTP_CREATED,
+            [],
+            ['groups' => ['post']]
         );
     }
     
-    #[Route('', name: 'user_list', methods: ['GET'])]
-    public function list(): JsonResponse
+    #[Route('/{publicId}', methods: ['GET'])]
+    public function show(string $publicId): JsonResponse
     {
-        return $this->json($this->userService->getAllUsers());
+        $user = $this->userService->getUserByPublicId($publicId);
+        
+        $response = UserResponseDTO::fromEntity($user);
+        
+        return $this->json(
+            ['success' => true, 'data' => $response],
+            JsonResponse::HTTP_OK,
+            [],
+            ['groups' => ['get']]
+        );
     }
     
     #[Route('/{publicId}', name: 'user_update', methods: ['PUT'])]
@@ -43,8 +57,14 @@ final class UserController extends AbstractController
         $dto = UserRequestDTO::fromJson($request->getContent());
         $this->validator->validate($dto);
         
+        $user = $this->userService->updateUser($publicId, $dto);
+        $response = UserResponseDTO::fromEntity($user);
+        
         return $this->json(
-            $this->userService->updateUser($publicId, $dto)
+            ['success' => true, 'data' => $response],
+            JsonResponse::HTTP_OK,
+            [],
+            ['groups' => ['put']]
         );
     }
     
@@ -53,6 +73,6 @@ final class UserController extends AbstractController
     {
         $this->userService->deleteUser($publicId);
         
-        return $this->json(['status' => 'User deleted']);
+        return $this->json(['success' => true, 'data' => null]);
     }
 }

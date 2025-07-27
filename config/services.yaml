@@ -23,8 +23,3 @@ services:
     App\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
-
-
-    App\Validator\Constraints\UniqueUserValidator:
-        arguments:
-            $userRepository: '@App\Repository\UserRepository'
