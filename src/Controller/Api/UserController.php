@@ -2,95 +2,55 @@
 
 namespace App\Controller\Api;
 
+use App\DTO\Request\UserRequestDTO;
+use App\Service\RequestValidatorService;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/v1/api/users')]
 final class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly RequestValidatorService $validator
+    ) {}
+    
     #[Route('', name: 'user_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): JsonResponse
+    public function create(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $dto = UserRequestDTO::fromJson($request->getContent());
+        $this->validator->validate($dto);
         
-        $user = new User();
-        $user->setLogin($data['login'] ?? null);
-        $user->setPass($data['pass'] ?? null);
-        $user->setPhone($data['phone'] ?? null);
-        
-        $errors = $validator->validate($user);
-        if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
-        }
-        
-        // Перевірка на унікальність login+pass
-        $exists = $em->getRepository(User::class)->findOneBy([
-            'login' => $user->getLogin(),
-            'pass' => $user->getPass(),
-        ]);
-        
-        if ($exists) {
-            return $this->json(['error' => 'User with same login and pass already exists.'], Response::HTTP_CONFLICT);
-        }
-        
-        $em->persist($user);
-        $em->flush();
-        
-        return $this->json(['status' => 'User created'], Response::HTTP_CREATED);
+        return $this->json(
+            $this->userService->createUser($dto),
+            JsonResponse::HTTP_CREATED
+        );
     }
     
     #[Route('', name: 'user_list', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): JsonResponse
+    public function list(): JsonResponse
     {
-        $users = $em->getRepository(User::class)->findAll();
-        $data = [];
-        
-        foreach ($users as $user) {
-            $data[] = [
-                'id' => $user->getId(),
-                'login' => $user->getLogin(),
-                'pass' => $user->getPass(),
-                'phone' => $user->getPhone(),
-            ];
-        }
-        
-        return $this->json($data);
+        return $this->json($this->userService->getAllUsers());
     }
     
-    #[Route('/{id}', name: 'user_update', methods: ['PUT'])]
-    public function update(int $id, Request $request, EntityManagerInterface $em, ValidatorInterface $validator): JsonResponse
+    #[Route('/{publicId}', name: 'user_update', methods: ['PUT'])]
+    public function update(string $publicId, Request $request): JsonResponse
     {
-        $user = $em->getRepository(User::class)->find($id);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
-        }
+        $dto = UserRequestDTO::fromJson($request->getContent());
+        $this->validator->validate($dto);
         
-        $data = json_decode($request->getContent(), true);
-        $user->setLogin($data['login'] ?? $user->getLogin());
-        $user->setPass($data['pass'] ?? $user->getPass());
-        $user->setPhone($data['phone'] ?? $user->getPhone());
-        
-        $errors = $validator->validate($user);
-        if (count($errors) > 0) {
-            return $this->json(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
-        }
-        
-        $em->flush();
-        
-        return $this->json(['status' => 'User updated']);
+        return $this->json(
+            $this->userService->updateUser($publicId, $dto)
+        );
     }
     
-    #[Route('/{id}', name: 'user_delete', methods: ['DELETE'])]
-    public function delete(int $id, EntityManagerInterface $em): JsonResponse
+    #[Route('/{publicId}', name: 'user_delete', methods: ['DELETE'])]
+    public function delete(string $publicId): JsonResponse
     {
-        $user = $em->getRepository(User::class)->find($id);
-        if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
-        }
-        
-        $em->remove($user);
-        $em->flush();
+        $this->userService->deleteUser($publicId);
         
         return $this->json(['status' => 'User deleted']);
     }

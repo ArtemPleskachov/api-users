@@ -23,6 +23,22 @@ class User
 
     #[ORM\Column(length: 8)]
     private ?string $pass = null;
+    
+    #[ORM\Column(type: 'string', unique: true)]
+    private string $publicId;
+    
+    
+    public function getPublicId(): string
+    {
+        return $this->publicId;
+    }
+    
+    public function setPublicId(string $publicId): static
+    {
+        $this->publicId = $publicId;
+        
+        return $this;
+    }
 
     public function getId(): ?int
     {

@@ -37,3 +37,6 @@
 172.30.0.1 - - [27/Jul/2025:13:15:25 +0000] "GET /adminer.php?server=db_mysql&username=dbuser&db=api-users&select=user HTTP/1.1" 200 3748 "http://localhost/adminer.php?server=db_mysql&username=dbuser&db=api-users&select=user" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0"
 172.30.0.1 - - [27/Jul/2025:13:15:26 +0000] "GET /adminer.php?server=db_mysql&username=dbuser&db=api-users&table=user HTTP/1.1" 200 2925 "http://localhost/adminer.php?server=db_mysql&username=dbuser&db=api-users&select=user" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0"
 172.30.0.1 - - [27/Jul/2025:13:19:19 +0000] "GET /adminer.php?server=db_mysql&username=dbuser&db=api-users&table=user HTTP/1.1" 200 2940 "http://localhost/adminer.php?server=db_mysql&username=dbuser&db=api-users&select=user" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0"
+172.30.0.1 - - [27/Jul/2025:14:57:52 +0000] "POST /v1/api/users HTTP/1.1" 500 125056 "-" "PostmanRuntime/7.44.1"
+172.30.0.1 - - [27/Jul/2025:14:58:42 +0000] "POST /v1/api/users HTTP/1.1" 500 2440 "-" "PostmanRuntime/7.44.1"
+172.30.0.1 - - [27/Jul/2025:14:58:55 +0000] "POST /v1/api/users HTTP/1.1" 500 126433 "-" "PostmanRuntime/7.44.1"
