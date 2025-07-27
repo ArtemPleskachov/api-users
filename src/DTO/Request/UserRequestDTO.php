@@ -21,7 +21,6 @@ class UserRequestDTO
         #[Assert\Length(max: 8)]
         public readonly string $phone,
         
-        #[Assert\NotBlank]
         #[Assert\Length(max: 8)]
         #[UniquePublicId]
         public readonly string $publicId

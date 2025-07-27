@@ -21,8 +21,10 @@ class UserService
         return $user;
     }
     
-    public function update(User $user, UserRequestDTO $dto): User
+    public function update(string $publicId, UserRequestDTO $dto): User
     {
+        $user = $this->getUserByPublicId($publicId);
+        
         $user
             ->setLogin($dto->login)
             ->setPass($dto->pass)
@@ -38,8 +40,9 @@ class UserService
         return $this->userRepository->findByPublicId($publicId);
     }
     
-    public function delete(User $user): void
+    public function delete(string $publicId): void
     {
+        $user = $this->getUserByPublicId($publicId);
         $this->userRepository->remove($user);
     }
 }
