@@ -70,7 +70,7 @@ This will launch:
 Access the PHP container:
 
 ```bash
-docker exec -it api-users-php bash
+docker exec -it php_{PROJECT_NAME} bash
 ```
 
 Install PHP dependencies:
@@ -86,15 +86,25 @@ php bin/console doctrine:migrations:migrate
 ```
 ---
 
-### Step 5 – Load Fixtures (optional)
+### Step 5 – Load Initial Users (SQL Dump or Fixtures)
+
+To get started quickly with the API right after launching the project, there are two options for loading test users.
+
+#### 🗃 Option 1 — SQL Dump (preferred method)
+
+After the containers are up and running, the database will be automatically populated using the SQL dump.
+
+> 📂 The `dump/users.sql` file includes 10 unique users for testing the API.  
+> ⚠️ If the dump is not applied automatically or you encounter issues (e.g., file not found or access denied to `mysql`), use the fallback option below.
+
+#### ✅ Option 2 — Symfony Fixtures (fallback method)
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
 
-⚠️ This will purge the database and create 12 unique users.
-
----
+> ⚠️ This command will purge the database and generate new test records.  
+> It is intended as a backup method in case the SQL dump fails to load.
 
 ## 🔐 Authorization
 
