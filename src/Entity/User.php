@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\UniqueConstraint(name: "unique_login_pass", columns: ["login", "pass"])]
 class User
 {
     #[ORM\Id]
@@ -15,7 +16,7 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 8)]
-    private ?string $Ðlogin = null;
+    private ?string $login = null;
 
     #[ORM\Column(length: 8)]
     private ?string $phone = null;
@@ -28,14 +29,14 @@ class User
         return $this->id;
     }
 
-    public function getÐlogin(): ?string
+    public function getlogin(): ?string
     {
-        return $this->Ðlogin;
+        return $this->login;
     }
 
-    public function setÐlogin(string $Ðlogin): static
+    public function setlogin(string $login): static
     {
-        $this->Ðlogin = $Ðlogin;
+        $this->login = $login;
 
         return $this;
     }
