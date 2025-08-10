@@ -26,7 +26,7 @@ class UserResponseDTO
         $dto->id = $user->getPublicId();
         $dto->login = $user->getLogin();
         $dto->phone = $user->getPhone();
-        $dto->pass = $user->getPass();
+        $dto->pass = $user->getPassword();
         
         return $dto;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Validator\Constraints\User;
 
-use App\DTO\Request\UserRequestDTO;
+use App\DTO\Request\CreateUserDTO;
 use App\Repository\Contract\UserRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -20,8 +20,8 @@ class UniqueUserValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
     
-        if (!$value instanceof UserRequestDTO) {
-            throw new UnexpectedValueException($value, UserRequestDTO::class);
+        if (!$value instanceof CreateUserDTO) {
+            throw new UnexpectedValueException($value, CreateUserDTO::class);
         }
         
         $user = $this->userRepository->findOneByLoginAndPass($value->login,$value->pass);
